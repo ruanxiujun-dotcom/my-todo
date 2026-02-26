@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="蔬菜批发记账助手 - 轻松管理每日收支和库存">
+    <title>菜老板记账</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 顶部状态栏 -->
+        <header class="app-header" id="appHeader">
+            <div class="header-left">
+                <div class="avatar">🥬</div>
+                <div class="header-info">
+                    <h1 class="header-title">菜老板记账</h1>
+                    <p class="header-date" id="headerDate"></p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" id="openProductsBtn" title="商品管理">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="openBuyersBtn" title="买家管理">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="openSuppliersBtn" title="供应商管理">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="notifBtn" title="通知">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="badge" id="notifBadge">2</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 页面容器 -->
+        <main class="page-container">
+            <!-- 首页/仪表盘 -->
+            <section class="page active" id="pageDashboard">
+                <div class="page-scroll">
+                    <!-- 今日概览卡片 -->
+                    <div class="summary-cards">
+                        <div class="summary-card income-card">
+                            <div class="card-icon">💰</div>
+                            <div class="card-info">
+                                <span class="card-label">今日收入</span>
+                                <span class="card-value" id="todayIncome">¥0.00</span>
+                            </div>
+                            <div class="card-trend up" id="incomeTrend">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <path d="M18 15l-6-6-6 6"></path>
+                                </svg>
+                                <span>12%</span>
+                            </div>
+                        </div>
+                        <div class="summary-card expense-card">
+                            <div class="card-icon">📤</div>
+                            <div class="card-info">
+                                <span class="card-label">今日支出</span>
+                                <span class="card-value" id="todayExpense">¥0.00</span>
+                            </div>
+                            <div class="card-trend down" id="expenseTrend">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                                <span>5%</span>
+                            </div>
+                        </div>
+                        <div class="summary-card profit-card">
+                            <div class="card-icon">📊</div>
+                            <div class="card-info">
+                                <span class="card-label">今日利润</span>
+                                <span class="card-value" id="todayProfit">¥0.00</span>
+                            </div>
+                            <div class="card-trend up" id="profitTrend">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <path d="M18 15l-6-6-6 6"></path>
+                                </svg>
+                                <span>18%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 快捷操作 -->
+                    <div class="section">
+                        <h2 class="section-title">快捷操作</h2>
+                        <div class="quick-actions">
+                            <button class="action-btn" data-action="addIncome">
+                                <div class="action-icon" style="background: #D1FAE5; color: #10B981;">💵</div>
+                                <span>记收入</span>
+                            </button>
+                            <button class="action-btn" data-action="addExpense">
+                                <div class="action-icon" style="background: #FCE7F3; color: #F43F5E;">🛒</div>
+                                <span>记支出</span>
+                            </button>
+                            <button class="action-btn" data-action="checkInventory">
+                                <div class="action-icon" style="background: #FEF3C7; color: #D97706;">📦</div>
+                                <span>查库存</span>
+                            </button>
+                            <button class="action-btn" data-action="viewStats">
+                                <div class="action-icon" style="background: #E0E7FF; color: #6366F1;">📈</div>
+                                <span>看报表</span>
+                            </button>
+                            <button class="action-btn" data-action="manageProducts">
+                                <div class="action-icon" style="background: #F3E8FF; color: #A855F7;">🏷️</div>
+                                <span>商品管理</span>
+                            </button>
+                            <button class="action-btn" data-action="manageCredits">
+                                <div class="action-icon" style="background: #FFEDD5; color: #EA580C;">📒</div>
+                                <span>查账本</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 近7天趋势 -->
+                    <div class="section">
+                        <h2 class="section-title">近7天收支趋势</h2>
+                        <div class="chart-card">
+                            <canvas id="trendChart" width="380" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 库存预警 -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span>库存预警</span>
+                            <span class="warning-badge" id="warningCount">3</span>
+                        </h2>
+                        <div class="warning-list" id="warningList">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 今日流水 -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span>今日流水</span>
+                            <button class="link-btn" data-action="viewAll">查看全部 →</button>
+                        </h2>
+                        <div class="transaction-list" id="todayTransactions">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 收入页面 -->
+            <section class="page" id="pageIncome">
+                <div class="page-scroll">
+                    <div class="page-header-bar">
+                        <h2>收入记录</h2>
+                        <button class="add-btn" id="addIncomeBtn">+ 新增收入</button>
+                    </div>
+
+                    <!-- 收入汇总 -->
+                    <div class="mini-summary">
+                        <div class="mini-item">
+                            <span class="mini-label">今日收入</span>
+                            <span class="mini-value income-text" id="incomeTodaySum">¥0.00</span>
+                        </div>
+                        <div class="mini-divider"></div>
+                        <div class="mini-item">
+                            <span class="mini-label">本月收入</span>
+                            <span class="mini-value" id="incomeMonthSum">¥0.00</span>
+                        </div>
+                        <div class="mini-divider"></div>
+                        <div class="mini-item">
+                            <span class="mini-label">笔数</span>
+                            <span class="mini-value" id="incomeTodayCount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- 收入列表 -->
+                    <div class="record-list" id="incomeList">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 记账页面（弹出层） -->
+            <div class="modal-overlay" id="addRecordModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">记一笔</h3>
+                        <button class="close-btn" id="closeModal">✕</button>
+                    </div>
+
+                    <!-- 收入/支出切换 -->
+                    <div class="modal-tabs">
+                        <button class="modal-tab active" data-type="income">收入</button>
+                        <button class="modal-tab" data-type="expense">支出</button>
+                    </div>
+
+                    <!-- 记账表单 -->
+                    <form id="recordForm" class="record-form">
+                        <!-- 蔬菜选择 -->
+                        <div class="form-group">
+                            <label class="form-label">选择蔬菜</label>
+                            <div class="veggie-grid" id="veggieGrid">
+                                <button type="button" class="veggie-btn selected" data-veggie="白菜">🥬 白菜</button>
+                                <button type="button" class="veggie-btn" data-veggie="番茄">🍅 番茄</button>
+                                <button type="button" class="veggie-btn" data-veggie="土豆">🥔 土豆</button>
+                                <button type="button" class="veggie-btn" data-veggie="黄瓜">🥒 黄瓜</button>
+                                <button type="button" class="veggie-btn" data-veggie="辣椒">🌶️ 辣椒</button>
+                                <button type="button" class="veggie-btn" data-veggie="茄子">🍆 茄子</button>
+                                <button type="button" class="veggie-btn" data-veggie="胡萝卜">🥕 胡萝卜</button>
+                                <button type="button" class="veggie-btn" data-veggie="洋葱">🧅 洋葱</button>
+                                <button type="button" class="veggie-btn" data-veggie="西兰花">🥦 西兰花</button>
+                                <button type="button" class="veggie-btn" data-veggie="蘑菇">🍄 蘑菇</button>
+                                <button type="button" class="veggie-btn" data-veggie="玉米">🌽 玉米</button>
+                                <button type="button" class="veggie-btn" data-veggie="其他">📝 其他</button>
+                            </div>
+                        </div>
+
+                        <!-- 重量和单价 -->
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label class="form-label">重量（斤）</label>
+                                <input type="number" id="inputWeight" class="form-input" placeholder="输入重量" step="0.1"
+                                    min="0">
+                            </div>
+                            <div class="form-group half">
+                                <label class="form-label">单价（元/斤）</label>
+                                <input type="number" id="inputPrice" class="form-input" placeholder="输入单价" step="0.01"
+                                    min="0">
+                            </div>
+                        </div>
+
+                        <!-- 包装选择（多包装时显示） -->
+                        <div class="form-group hidden" id="packageSelectorGroup">
+                            <label class="form-label">选择包装</label>
+                            <div class="payment-methods package-selector-btns">
+                                <!-- 由JS动态生成 -->
+                            </div>
+                        </div>
+
+                        <!-- 自动计算金额 -->
+                        <div class="form-group">
+                            <label class="form-label">金额</label>
+                            <div class="amount-display" id="autoAmount">¥ 0.00</div>
+                        </div>
+
+                        <!-- 收款方式（仅收入时显示） -->
+                        <div class="form-group" id="paymentGroup">
+                            <label class="form-label">收款方式</label>
+                            <div class="payment-methods">
+                                <button type="button" class="pay-btn selected" data-pay="cash">💵 现金</button>
+                                <button type="button" class="pay-btn" data-pay="wechat">💚 微信</button>
+                                <button type="button" class="pay-btn" data-pay="alipay">💙 支付宝</button>
+                                <button type="button" class="pay-btn" data-pay="transfer">🏦 转账</button>
+                                <button type="button" class="pay-btn credit-pay-btn" data-pay="credit">📒 赊账</button>
+                            </div>
+                        </div>
+
+                        <!-- 买家选择（赊账时显示） -->
+                        <div class="form-group hidden" id="buyerSelectorGroup">
+                            <label class="form-label">
+                                <span>选择买家</span>
+                                <button type="button" class="link-btn" id="addBuyerQuickBtn">+ 新增买家</button>
+                            </label>
+                            <div class="buyer-search-wrapper">
+                                <input type="text" id="buyerFilterInput" class="form-input buyer-filter-input"
+                                    placeholder="搜索买家名称...">
+                            </div>
+                            <div class="buyer-picker-list" id="buyerPickerList">
+                                <!-- 由JS动态生成 -->
+                            </div>
+                            <!-- 赊欠预警 -->
+                            <div class="credit-warning hidden" id="creditWarning">
+                                <span id="creditWarningText"></span>
+                            </div>
+                        </div>
+
+                        <!-- 支出分类（仅支出时显示） -->
+                        <div class="form-group hidden" id="expenseCategoryGroup">
+                            <label class="form-label">支出类型</label>
+                            <div class="payment-methods">
+                                <button type="button" class="pay-btn selected" data-category="purchase">🛒 进货</button>
+                                <button type="button" class="pay-btn" data-category="rent">🏪 摊位费</button>
+                                <button type="button" class="pay-btn" data-category="transport">🚛 运费</button>
+                                <button type="button" class="pay-btn" data-category="labor">👷 人工</button>
+                                <button type="button" class="pay-btn" data-category="other">📋 其他</button>
+                            </div>
+                        </div>
+
+                        <!-- 供应商选择（进货支出时显示） -->
+                        <div class="form-group hidden" id="supplierSelectorGroup">
+                            <label class="form-label">
+                                <span>关联供应商（选填）</span>
+                                <button type="button" class="link-btn" id="addSupplierQuickBtn">+ 新增供应商</button>
+                            </label>
+                            <div class="buyer-search-wrapper">
+                                <input type="text" id="supplierFilterInput" class="form-input buyer-filter-input"
+                                    placeholder="搜索供应商名称...">
+                            </div>
+                            <div class="buyer-picker-list" id="supplierPickerList">
+                                <!-- 由JS动态生成 -->
+                            </div>
+                        </div>
+
+                        <!-- 备注 -->
+                        <div class="form-group">
+                            <label class="form-label">备注（选填）</label>
+                            <input type="text" id="inputNote" class="form-input" placeholder="客户名称或备注信息">
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <button type="submit" class="submit-btn" id="submitRecord">
+                            <span class="submit-text">确认记账</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 支出页面 -->
+            <section class="page" id="pageExpense">
+                <div class="page-scroll">
+                    <div class="page-header-bar">
+                        <h2>支出记录</h2>
+                        <button class="add-btn" id="addExpenseBtn">+ 新增支出</button>
+                    </div>
+
+                    <!-- 支出汇总 -->
+                    <div class="mini-summary expense-summary">
+                        <div class="mini-item">
+                            <span class="mini-label">今日支出</span>
+                            <span class="mini-value expense-text" id="expenseTodaySum">¥0.00</span>
+                        </div>
+                        <div class="mini-divider"></div>
+                        <div class="mini-item">
+                            <span class="mini-label">本月支出</span>
+                            <span class="mini-value" id="expenseMonthSum">¥0.00</span>
+                        </div>
+                        <div class="mini-divider"></div>
+                        <div class="mini-item">
+                            <span class="mini-label">笔数</span>
+                            <span class="mini-value" id="expenseTodayCount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- 支出分类统计 -->
+                    <div class="category-bar" id="expenseCategoryBar">
+                        <div class="cat-item active" data-filter="all">全部</div>
+                        <div class="cat-item" data-filter="purchase">🛒 进货</div>
+                        <div class="cat-item" data-filter="rent">🏪 摊位费</div>
+                        <div class="cat-item" data-filter="transport">🚛 运费</div>
+                        <div class="cat-item" data-filter="labor">👷 人工</div>
+                        <div class="cat-item" data-filter="other">📋 其他</div>
+                    </div>
+
+                    <!-- 支出列表 -->
+                    <div class="record-list" id="expenseList">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 库存页面 -->
+            <section class="page" id="pageInventory">
+                <div class="page-scroll">
+                    <div class="page-header-bar">
+                        <h2>库存管理</h2>
+                        <button class="add-btn" id="addLossBtn">+ 记损耗</button>
+                    </div>
+
+                    <!-- 搜索栏 -->
+                    <div class="search-bar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" id="inventorySearch" class="search-input" placeholder="搜索蔬菜...">
+                    </div>
+
+                    <!-- 库存总览 -->
+                    <div class="inventory-overview">
+                        <div class="inv-stat">
+                            <span class="inv-stat-value" id="totalTypes">0</span>
+                            <span class="inv-stat-label">蔬菜品种</span>
+                        </div>
+                        <div class="inv-stat">
+                            <span class="inv-stat-value" id="totalStock">0</span>
+                            <span class="inv-stat-label">总库存(斤)</span>
+                        </div>
+                        <div class="inv-stat warning">
+                            <span class="inv-stat-value" id="lowStockCount">0</span>
+                            <span class="inv-stat-label">库存不足</span>
+                        </div>
+                    </div>
+
+                    <!-- 库存列表 -->
+                    <div class="inventory-list" id="inventoryList">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 统计页面 -->
+            <section class="page" id="pageStats">
+                <div class="page-scroll">
+                    <div class="page-header-bar">
+                        <h2>统计分析</h2>
+                        <button class="add-btn" id="exportBtn">📤 导出</button>
+                    </div>
+
+                    <!-- 时间范围选择 -->
+                    <div class="time-range-bar">
+                        <button class="range-btn active" data-range="day">今日</button>
+                        <button class="range-btn" data-range="week">本周</button>
+                        <button class="range-btn" data-range="month">本月</button>
+                    </div>
+
+                    <!-- 收支对比 -->
+                    <div class="stats-summary">
+                        <div class="stats-item">
+                            <div class="stats-dot income-dot"></div>
+                            <span class="stats-label">总收入</span>
+                            <span class="stats-value income-text" id="statsTotalIncome">¥0.00</span>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-dot expense-dot"></div>
+                            <span class="stats-label">总支出</span>
+                            <span class="stats-value expense-text" id="statsTotalExpense">¥0.00</span>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-dot profit-dot"></div>
+                            <span class="stats-label">净利润</span>
+                            <span class="stats-value profit-text" id="statsTotalProfit">¥0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- 收支柱状图 -->
+                    <div class="section">
+                        <h2 class="section-title">收支对比</h2>
+                        <div class="chart-card">
+                            <canvas id="barChart" width="380" height="220"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 蔬菜利润排行 -->
+                    <div class="section">
+                        <h2 class="section-title">🏆 蔬菜利润排行</h2>
+                        <div class="rank-list" id="profitRank">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 收支明细 -->
+                    <div class="section">
+                        <h2 class="section-title">收支明细</h2>
+                        <div class="detail-list" id="statsDetail">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-page="pageDashboard">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>首页</span>
+            </button>
+            <button class="nav-item" data-page="pageIncome">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span>收入</span>
+            </button>
+            <button class="nav-item center-btn" id="centerAddBtn">
+                <div class="center-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </div>
+                <span>记账</span>
+            </button>
+            <button class="nav-item" data-page="pageInventory">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <span>库存</span>
+            </button>
+            <button class="nav-item" data-page="pageStats">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>统计</span>
+            </button>
+        </nav>
+
+        <!-- 损耗记录弹窗 -->
+        <div class="modal-overlay" id="lossModal">
+            <div class="modal-content modal-sm">
+                <div class="modal-header">
+                    <h3>记录损耗</h3>
+                    <button class="close-btn" id="closeLossModal">✕</button>
+                </div>
+                <form id="lossForm" class="record-form">
+                    <div class="form-group">
+                        <label class="form-label">选择蔬菜</label>
+                        <select id="lossVeggie" class="form-select">
+                            <!-- 由JS动态生成 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">损耗重量（斤）</label>
+                        <input type="number" id="lossWeight" class="form-input" placeholder="输入损耗重量" step="0.1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">原因</label>
+                        <div class="payment-methods">
+                            <button type="button" class="pay-btn selected" data-reason="spoiled">🥀 变质</button>
+                            <button type="button" class="pay-btn" data-reason="damaged">💔 损坏</button>
+                            <button type="button" class="pay-btn" data-reason="other">📝 其他</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">确认记录</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 商品管理弹窗 -->
+        <div class="modal-overlay" id="productsModal">
+            <div class="modal-content modal-full">
+                <div class="modal-header">
+                    <h3>🏷️ 商品管理</h3>
+                    <button class="close-btn" id="closeProductsModal">✕</button>
+                </div>
+
+                <!-- 搜索栏 -->
+                <div class="search-bar" style="margin-bottom: 12px">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="productSearch" class="search-input" placeholder="搜索商品...">
+                </div>
+
+                <!-- 新增按钮 -->
+                <button class="submit-btn" id="addProductBtn" style="margin-bottom: 16px">
+                    + 新增商品
+                </button>
+
+                <!-- 商品列表 -->
+                <div class="product-list-container" id="productListContainer">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增/编辑商品弹窗 -->
+        <div class="modal-overlay" id="editProductModal">
+            <div class="modal-content modal-full">
+                <div class="modal-header">
+                    <h3 id="editProductTitle">新增商品</h3>
+                    <button class="close-btn" id="closeEditProductModal">✕</button>
+                </div>
+
+                <form id="productForm" class="record-form">
+                    <!-- Emoji选择 -->
+                    <div class="form-group">
+                        <label class="form-label">图标</label>
+                        <div class="emoji-picker-wrapper">
+                            <button type="button" class="emoji-trigger" id="emojiPickerTrigger">
+                                <span class="selected-emoji" id="selectedEmoji">🥬</span>
+                                <span class="emoji-arrow">▼</span>
+                            </button>
+                            <input type="hidden" id="productEmojiValue" value="🥬">
+                            <div class="emoji-dropdown" id="emojiPickerDropdown">
+                                <!-- 由JS动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 商品名称 -->
+                    <div class="form-group">
+                        <label class="form-label">商品名称</label>
+                        <input type="text" id="productName" class="form-input" placeholder="例如：大白菜、西红柿" required>
+                    </div>
+
+                    <!-- 库存预警线 -->
+                    <div class="form-group">
+                        <label class="form-label">库存预警线（斤）</label>
+                        <input type="number" id="productThreshold" class="form-input" placeholder="低于此值预警" value="10"
+                            min="0">
+                    </div>
+
+                    <!-- 包装类型列表 -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span>包装与单价</span>
+                            <button type="button" class="link-btn" id="addPackageBtn">+ 添加包装</button>
+                        </label>
+                        <div id="packageList" class="package-list">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <button type="submit" class="submit-btn">确认保存</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 买家管理弹窗 -->
+        <div class="modal-overlay" id="buyersModal">
+            <div class="modal-content modal-full">
+                <div class="modal-header">
+                    <h3>👥 买家管理</h3>
+                    <button class="close-btn" id="closeBuyersModal">✕</button>
+                </div>
+
+                <!-- 买家总览 -->
+                <div class="buyer-overview">
+                    <div class="inv-stat">
+                        <span class="inv-stat-value" id="buyerTotalCount">0</span>
+                        <span class="inv-stat-label">买家总数</span>
+                    </div>
+                    <div class="inv-stat">
+                        <span class="inv-stat-value" id="buyerTotalCredit">¥0</span>
+                        <span class="inv-stat-label">赊欠总额</span>
+                    </div>
+                    <div class="inv-stat warning">
+                        <span class="inv-stat-value" id="buyerOverCredit">0</span>
+                        <span class="inv-stat-label">近超额</span>
+                    </div>
+                </div>
+
+                <!-- 搜索栏 -->
+                <div class="search-bar" style="margin-bottom: 12px">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="buyerSearch" class="search-input" placeholder="搜索买家名称或手机号...">
+                </div>
+
+                <!-- 分类筛选 -->
+                <div class="category-bar" id="buyerCategoryBar">
+                    <div class="cat-item active" data-filter="all">全部</div>
+                    <div class="cat-item" data-filter="restaurant">🍽️ 餐馆</div>
+                    <div class="cat-item" data-filter="hotel">🏨 酒店</div>
+                    <div class="cat-item" data-filter="canteen">🏫 食堂</div>
+                    <div class="cat-item" data-filter="market">🏪 零售</div>
+                    <div class="cat-item" data-filter="supermarket">🛒 超市</div>
+                    <div class="cat-item" data-filter="personal">👤 个人</div>
+                </div>
+
+                <!-- 新增按钮 -->
+                <button class="submit-btn" id="addBuyerBtn" style="margin-bottom: 16px">+ 新增买家</button>
+
+                <!-- 买家列表 -->
+                <div class="buyer-list-container" id="buyerListContainer">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增/编辑买家弹窗 -->
+        <div class="modal-overlay" id="editBuyerModal">
+            <div class="modal-content modal-full">
+                <div class="modal-header">
+                    <h3 id="editBuyerTitle">新增买家</h3>
+                    <button class="close-btn" id="closeEditBuyerModal">✕</button>
+                </div>
+
+                <form id="buyerForm" class="record-form">
+                    <!-- 买家名称 -->
+                    <div class="form-group">
+                        <label class="form-label">买家名称</label>
+                        <input type="text" id="buyerName" class="form-input" placeholder="输入买家或单位名称" required>
+                    </div>
+
+                    <!-- 手机号 -->
+                    <div class="form-group">
+                        <label class="form-label">手机号</label>
+                        <input type="tel" id="buyerPhone" class="form-input" placeholder="输入联系电话">
+                    </div>
+
+                    <!-- 买家分类 -->
+                    <div class="form-group">
+                        <label class="form-label">买家分类</label>
+                        <div class="payment-methods" id="buyerCatSelector">
+                            <button type="button" class="pay-btn selected" data-category="restaurant">🍽️ 餐馆</button>
+                            <button type="button" class="pay-btn" data-category="hotel">🏨 酒店</button>
+                            <button type="button" class="pay-btn" data-category="canteen">🏫 食堂</button>
+                            <button type="button" class="pay-btn" data-category="market">🏪 零售商</button>
+                            <button type="button" class="pay-btn" data-category="supermarket">🛒 超市</button>
+                            <button type="button" class="pay-btn" data-category="personal">👤 个人</button>
+                            <button type="button" class="pay-btn" data-category="other">📋 其他</button>
+                        </div>
+                    </div>
+
+                    <!-- 备注 -->
+                    <div class="form-group">
+                        <label class="form-label">备注</label>
+                        <input type="text" id="buyerNote" class="form-input" placeholder="例如：每周三配送、喜欢有机菜">
+                    </div>
+
+                    <!-- 发票信息 -->
+                    <div class="form-group">
+                        <label class="form-label">🧾 发票抬头</label>
+                        <input type="text" id="buyerInvoiceTitle" class="form-input" placeholder="公司或单位全称">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">发票描述</label>
+                        <input type="text" id="buyerInvoiceDesc" class="form-input" placeholder="例如：增值税普通发票">
+                    </div>
+
+                    <!-- 赊欠设置 -->
+                    <div class="form-group">
+                        <label class="form-label">💳 赊欠管理</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label class="form-label">最大赊欠额度(元)</label>
+                            <input type="number" id="buyerCreditLimit" class="form-input" placeholder="0=不允许" min="0"
+                                step="100">
+                        </div>
+                        <div class="form-group half">
+                            <label class="form-label">账期(天)</label>
+                            <input type="number" id="buyerCreditDays" class="form-input" placeholder="0=无期限" min="0">
+                        </div>
+                    </div>
+
+                    <!-- 提交 -->
+                    <button type="submit" class="submit-btn">确认保存</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 赊欠账本弹窗 ========== -->
+        <div class="modal" id="creditsModal">
+            <div class="modal-sheet">
+                <div class="modal-header">
+                    <h3 class="modal-title">📒 赊欠账本</h3>
+                    <button class="modal-close" id="closeCreditsModal">×</button>
+                </div>
+
+                <!-- 账本概览统计 -->
+                <div class="buyer-overview" style="margin-bottom: 15px;">
+                    <div class="buyer-overview-item">
+                        <span class="buyer-overview-num warn" id="creditTotalAmount">¥0</span>
+                        <span class="buyer-overview-label">应收总欠款</span>
+                    </div>
+                    <div class="buyer-overview-item">
+                        <span class="buyer-overview-num" id="creditDebtorCount">0</span>
+                        <span class="buyer-overview-label">欠款人数</span>
+                    </div>
+                </div>
+
+                <!-- 搜索 -->
+                <div class="search-bar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="creditSearchInput" class="search-input" placeholder="搜索买家姓名...">
+                </div>
+
+                <!-- 账本列表 -->
+                <div id="creditListContainer" class="credit-list-container">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 还款结账弹窗 ========== -->
+        <div class="modal" id="repayModal">
+            <div class="modal-sheet">
+                <div class="modal-header">
+                    <h3 class="modal-title">💰 赊欠还款收款</h3>
+                    <button class="modal-close" id="closeRepayModal">×</button>
+                </div>
+
+                <form id="repayForm">
+                    <div class="repay-info-box">
+                        <div class="repay-label">买家姓名</div>
+                        <div class="repay-value" id="repayBuyerName">张记饭店</div>
+                        <div class="repay-label" style="margin-top:8px;">当前总欠款</div>
+                        <div class="repay-value warn" id="repayDebtAmount">¥1200.00</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">本次收款金额 (元) *</label>
+                        <input type="number" id="repayAmountInput" class="form-input highlight-input"
+                            placeholder="输入收款金额" required min="0.01" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">收款方式</label>
+                        <div class="payment-methods" id="repayMethodGroup">
+                            <button type="button" class="pay-btn" data-pay="cash">💵 现金</button>
+                            <button type="button" class="pay-btn selected" data-pay="wechat">💚 微信</button>
+                            <button type="button" class="pay-btn" data-pay="alipay">💙 支付宝</button>
+                            <button type="button" class="pay-btn" data-pay="transfer">🏦 转账</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">备注 (选填)</label>
+                        <input type="text" id="repayNoteInput" class="form-input" placeholder="例如：结清上月菜款">
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="margin-top: 20px;">确认收款并销账</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 供应商管理弹窗 ========== -->
+        <div class="modal" id="suppliersModal">
+            <div class="modal-sheet">
+                <div class="modal-header">
+                    <h3 class="modal-title">🏭 供应商管理</h3>
+                    <button class="modal-close" id="closeSuppliersModal">×</button>
+                </div>
+
+                <!-- 总览统计 -->
+                <div class="buyer-overview">
+                    <div class="buyer-overview-item">
+                        <span class="buyer-overview-num" id="supplierTotalCount">0</span>
+                        <span class="buyer-overview-label">供应商总数</span>
+                    </div>
+                    <div class="buyer-overview-item">
+                        <span class="buyer-overview-num primary" id="supplierTotalPayable">¥0</span>
+                        <span class="buyer-overview-label">待付总额</span>
+                    </div>
+                    <div class="buyer-overview-item">
+                        <span class="buyer-overview-num warn" id="supplierPendingCount">0</span>
+                        <span class="buyer-overview-label">有待付款</span>
+                    </div>
+                </div>
+
+                <!-- 搜索 -->
+                <div class="search-bar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="supplierSearch" class="search-input" placeholder="搜索供应商名称或联系人...">
+                </div>
+
+                <!-- 分类筛选栏 -->
+                <div class="category-bar" id="supplierCategoryBar">
+                    <div class="cat-item active" data-filter="all">全部</div>
+                    <div class="cat-item" data-filter="farm">🌾 农场</div>
+                    <div class="cat-item" data-filter="wholesale">🏭 批发</div>
+                    <div class="cat-item" data-filter="cooperative">🤝 合作社</div>
+                    <div class="cat-item" data-filter="importer">🚢 进口</div>
+                    <div class="cat-item" data-filter="broker">🤵 经纪人</div>
+                    <div class="cat-item" data-filter="other">📦 其他</div>
+                </div>
+
+                <!-- 新增按钮 -->
+                <button class="submit-btn" id="addSupplierBtn">+ 新增供应商</button>
+
+                <!-- 供应商列表 -->
+                <div id="supplierListContainer"></div>
+            </div>
+        </div>
+
+        <!-- ========== 编辑供应商弹窗 ========== -->
+        <div class="modal" id="editSupplierModal">
+            <div class="modal-sheet">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editSupplierTitle">新增供应商</h3>
+                    <button class="modal-close" id="closeEditSupplierModal">×</button>
+                </div>
+                <form id="supplierForm">
+                    <!-- 基本信息 -->
+                    <div class="form-group">
+                        <label class="form-label">供应商名称 *</label>
+                        <input type="text" id="supplierName" class="form-input" placeholder="请输入供应商名称" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label class="form-label">联系电话</label>
+                            <input type="tel" id="supplierPhone" class="form-input" placeholder="手机或座机">
+                        </div>
+                        <div class="form-group half">
+                            <label class="form-label">联系人</label>
+                            <input type="text" id="supplierContact" class="form-input" placeholder="负责人姓名">
+                        </div>
+                    </div>
+
+                    <!-- 供应商分类 -->
+                    <div class="form-group">
+                        <label class="form-label">供应商类型</label>
+                        <div class="payment-methods" id="supplierCatSelector">
+                            <button type="button" class="pay-btn selected" data-category="farm">🌾 农场/农户</button>
+                            <button type="button" class="pay-btn" data-category="wholesale">🏭 批发市场</button>
+                            <button type="button" class="pay-btn" data-category="cooperative">🤝 合作社</button>
+                            <button type="button" class="pay-btn" data-category="importer">🚢 进口商</button>
+                            <button type="button" class="pay-btn" data-category="broker">🤵 经纪人</button>
+                            <button type="button" class="pay-btn" data-category="other">📦 其他</button>
+                        </div>
+                    </div>
+
+                    <!-- 付款方式 -->
+                    <div class="form-group">
+                        <label class="form-label">付款方式</label>
+                        <div class="payment-methods" id="supplierPayTermSelector">
+                            <button type="button" class="pay-btn selected" data-term="cash">💵 现付</button>
+                            <button type="button" class="pay-btn" data-term="monthly">📅 月结</button>
+                            <button type="button" class="pay-btn" data-term="weekly">🗓 周结</button>
+                            <button type="button" class="pay-btn" data-term="prepaid">💳 预付款</button>
+                            <button type="button" class="pay-btn" data-term="credit30">30天账期</button>
+                            <button type="button" class="pay-btn" data-term="credit60">60天账期</button>
+                        </div>
+                    </div>
+
+                    <!-- 地址 -->
+                    <div class="form-group">
+                        <label class="form-label">📍 供货地址</label>
+                        <input type="text" id="supplierAddress" class="form-input" placeholder="农场/仓库/市场地址">
+                    </div>
+
+                    <!-- 备注 -->
+                    <div class="form-group">
+                        <label class="form-label">💬 备注</label>
+                        <input type="text" id="supplierNote" class="form-input" placeholder="供货周期、品质说明等">
+                    </div>
+
+                    <!-- 提交 -->
+                    <button type="submit" class="submit-btn">确认保存</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast 提示 -->
+        <div class="toast" id="toast">
+            <span id="toastMsg"></span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/buyers.js"></script>
+    <script src="js/suppliers.js"></script>
+    <script src="js/credits.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/income.js"></script>
+    <script src="js/expense.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/stats.js"></script>
+</body>
+
+</html>
