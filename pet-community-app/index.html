@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Pet Community - 宠物社区，分享宠物生活，发现宠物服务">
+    <title>Pet Community 宠物社区</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 顶部导航栏 -->
+        <header class="app-header" id="appHeader">
+            <div class="header-left">
+                <div class="header-logo">🐾</div>
+                <div class="header-info">
+                    <h1>Pet Community</h1>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" id="searchBtn" title="搜索">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="notifBtn" title="通知">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="badge" id="notifBadge">3</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 页面容器 -->
+        <main class="page-container">
+
+            <!-- ========== 首页 - 社区动态 ========== -->
+            <section class="page active" id="pageCommunity">
+                <div class="page-scroll">
+                    <!-- 宠物故事滑动 -->
+                    <div class="stories-section">
+                        <div class="stories-scroll" id="storiesScroll">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 动态列表 -->
+                    <div id="postList">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== 宠物档案页面 ========== -->
+            <section class="page" id="pagePets">
+                <div class="page-scroll">
+                    <!-- 我的宠物 -->
+                    <div class="section-header">
+                        <h2 class="section-title">🐾 我的宠物</h2>
+                    </div>
+                    <div class="my-pets-scroll" id="myPetsScroll">
+                        <!-- 由JS动态生成 -->
+                    </div>
+
+                    <!-- 宠物详情区域 -->
+                    <div id="petDetailSection">
+                        <!-- 由JS动态显示选中宠物的详情 -->
+                    </div>
+
+                    <!-- 健康记录 -->
+                    <div class="health-section" id="healthSection">
+                        <div class="section-header">
+                            <h2 class="section-title">📋 健康记录</h2>
+                            <button class="section-link" id="addHealthBtn">+ 添加</button>
+                        </div>
+                        <div class="health-timeline" id="healthTimeline">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== 附近服务页面 ========== -->
+            <section class="page" id="pageServices">
+                <div class="page-scroll">
+                    <div class="section-header">
+                        <h2 class="section-title">📍 附近服务</h2>
+                    </div>
+
+                    <!-- 搜索 -->
+                    <div class="search-bar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" id="serviceSearch" placeholder="搜索宠物医院、美容店...">
+                    </div>
+
+                    <!-- 分类筛选 -->
+                    <div class="filter-tags" id="serviceFilters">
+                        <button class="filter-tag active" data-filter="all">全部</button>
+                        <button class="filter-tag" data-filter="hospital">🏥 医院</button>
+                        <button class="filter-tag" data-filter="grooming">✂️ 美容</button>
+                        <button class="filter-tag" data-filter="park">🌳 乐园</button>
+                        <button class="filter-tag" data-filter="shop">🛍️ 商店</button>
+                        <button class="filter-tag" data-filter="training">🎓 训练</button>
+                    </div>
+
+                    <!-- 服务列表 -->
+                    <div id="serviceList">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== 领养中心页面 ========== -->
+            <section class="page" id="pageAdoption">
+                <div class="page-scroll">
+                    <div class="section-header">
+                        <h2 class="section-title">💕 领养中心</h2>
+                    </div>
+
+                    <!-- 领养统计 -->
+                    <div class="adopt-stats">
+                        <div class="adopt-stat-card">
+                            <div class="adopt-stat-num" id="adoptWaiting">28</div>
+                            <div class="adopt-stat-label">待领养</div>
+                        </div>
+                        <div class="adopt-stat-card">
+                            <div class="adopt-stat-num" id="adoptSuccess">156</div>
+                            <div class="adopt-stat-label">已领养</div>
+                        </div>
+                        <div class="adopt-stat-card">
+                            <div class="adopt-stat-num" id="adoptVolunteer">42</div>
+                            <div class="adopt-stat-label">志愿者</div>
+                        </div>
+                    </div>
+
+                    <!-- 筛选 -->
+                    <div class="filter-tags" id="adoptFilters">
+                        <button class="filter-tag active" data-filter="all">全部</button>
+                        <button class="filter-tag" data-filter="dog">🐕 狗狗</button>
+                        <button class="filter-tag" data-filter="cat">🐱 猫咪</button>
+                        <button class="filter-tag" data-filter="rabbit">🐰 兔子</button>
+                        <button class="filter-tag" data-filter="other">🐹 其他</button>
+                    </div>
+
+                    <!-- 领养列表 -->
+                    <div class="adopt-grid" id="adoptGrid">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== 个人中心页面 ========== -->
+            <section class="page" id="pageProfile">
+                <div class="page-scroll">
+                    <!-- 个人信息 -->
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            😊
+                            <div class="edit-badge">✏️</div>
+                        </div>
+                        <div class="profile-name" id="profileName">宠物爱好者</div>
+                        <div class="profile-bio" id="profileBio">爱宠物，爱生活 🐾</div>
+                    </div>
+
+                    <!-- 统计数据 -->
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-num" id="profilePosts">12</div>
+                            <div class="profile-stat-label">帖子</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-num" id="profileFollowers">256</div>
+                            <div class="profile-stat-label">粉丝</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-num" id="profileFollowing">89</div>
+                            <div class="profile-stat-label">关注</div>
+                        </div>
+                    </div>
+
+                    <!-- 菜单 - 我的内容 -->
+                    <div class="menu-section">
+                        <div class="menu-section-title">我的内容</div>
+                        <div class="menu-list">
+                            <div class="menu-item" data-action="myPosts">
+                                <span class="menu-icon">📝</span>
+                                <span class="menu-text">我的帖子</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item" data-action="myFavorites">
+                                <span class="menu-icon">⭐</span>
+                                <span class="menu-text">我的收藏</span>
+                                <span class="menu-badge">5</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item" data-action="myAlbum">
+                                <span class="menu-icon">📸</span>
+                                <span class="menu-text">宠物相册</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 菜单 - 服务 -->
+                    <div class="menu-section">
+                        <div class="menu-section-title">服务</div>
+                        <div class="menu-list">
+                            <div class="menu-item" data-action="adoptRecord">
+                                <span class="menu-icon">💕</span>
+                                <span class="menu-text">领养记录</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item" data-action="appointment">
+                                <span class="menu-icon">📅</span>
+                                <span class="menu-text">预约记录</span>
+                                <span class="menu-badge">2</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item" data-action="orders">
+                                <span class="menu-icon">📦</span>
+                                <span class="menu-text">我的订单</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 菜单 - 设置 -->
+                    <div class="menu-section">
+                        <div class="menu-section-title">设置</div>
+                        <div class="menu-list">
+                            <div class="menu-item" data-action="settings">
+                                <span class="menu-icon">⚙️</span>
+                                <span class="menu-text">应用设置</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item" data-action="help">
+                                <span class="menu-icon">❓</span>
+                                <span class="menu-text">帮助与反馈</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                            <div class="menu-item" data-action="about">
+                                <span class="menu-icon">ℹ️</span>
+                                <span class="menu-text">关于我们</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-page="pageCommunity">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>首页</span>
+            </button>
+            <button class="nav-item" data-page="pagePets">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.8">
+                    <path d="M12 21c-1.5 0-5-2.5-5-6.5C7 11.5 9.5 9 12 9s5 2.5 5 5.5c0 4-3.5 6.5-5 6.5z"></path>
+                    <circle cx="7" cy="6" r="2.5"></circle>
+                    <circle cx="17" cy="6" r="2.5"></circle>
+                    <circle cx="4" cy="12" r="2"></circle>
+                    <circle cx="20" cy="12" r="2"></circle>
+                </svg>
+                <span>宠物</span>
+            </button>
+            <button class="nav-item center-btn" id="centerPublishBtn">
+                <div class="center-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </div>
+                <span>发布</span>
+            </button>
+            <button class="nav-item" data-page="pageAdoption">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg>
+                <span>领养</span>
+            </button>
+            <button class="nav-item" data-page="pageProfile">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>我的</span>
+            </button>
+        </nav>
+
+        <!-- ========== 发布动态弹窗 ========== -->
+        <div class="modal-overlay" id="publishModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📝 发布动态</h3>
+                    <button class="close-btn" id="closePublishModal">✕</button>
+                </div>
+                <form id="publishForm">
+                    <div class="form-group">
+                        <label class="form-label">内容</label>
+                        <textarea class="form-textarea" id="publishText" placeholder="分享你和宠物的故事..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">选择宠物</label>
+                        <div class="option-group" id="publishPetSelect">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">添加标签</label>
+                        <div class="option-group" id="publishTagSelect">
+                            <button type="button" class="option-btn" data-tag="日常">📷 日常</button>
+                            <button type="button" class="option-btn" data-tag="萌宠">🥰 萌宠</button>
+                            <button type="button" class="option-btn" data-tag="美食">🍖 美食</button>
+                            <button type="button" class="option-btn" data-tag="健康">💊 健康</button>
+                            <button type="button" class="option-btn" data-tag="训练">🎾 训练</button>
+                            <button type="button" class="option-btn" data-tag="出行">🚗 出行</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">发布</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 添加宠物弹窗 ========== -->
+        <div class="modal-overlay" id="addPetModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🐾 添加宠物</h3>
+                    <button class="close-btn" id="closeAddPetModal">✕</button>
+                </div>
+                <form id="addPetForm">
+                    <div class="form-group">
+                        <label class="form-label">宠物类型</label>
+                        <div class="option-group" id="petTypeSelect">
+                            <button type="button" class="option-btn selected" data-type="dog" data-emoji="🐕">🐕 狗狗</button>
+                            <button type="button" class="option-btn" data-type="cat" data-emoji="🐱">🐱 猫咪</button>
+                            <button type="button" class="option-btn" data-type="rabbit" data-emoji="🐰">🐰 兔子</button>
+                            <button type="button" class="option-btn" data-type="bird" data-emoji="🐦">🐦 鸟类</button>
+                            <button type="button" class="option-btn" data-type="fish" data-emoji="🐟">🐟 鱼类</button>
+                            <button type="button" class="option-btn" data-type="hamster" data-emoji="🐹">🐹 仓鼠</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">宠物名称</label>
+                        <input type="text" class="form-input" id="petNameInput" placeholder="给你的宠物起个名字" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">品种</label>
+                        <input type="text" class="form-input" id="petBreedInput" placeholder="例如：金毛、布偶猫">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">年龄</label>
+                            <input type="text" class="form-input" id="petAgeInput" placeholder="例如：2岁">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">性别</label>
+                            <div class="option-group" id="petGenderSelect">
+                                <button type="button" class="option-btn selected" data-gender="male">♂ 公</button>
+                                <button type="button" class="option-btn" data-gender="female">♀ 母</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">体重（kg）</label>
+                        <input type="number" class="form-input" id="petWeightInput" placeholder="输入体重" step="0.1"
+                            min="0">
+                    </div>
+                    <button type="submit" class="submit-btn">确认添加</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 添加健康记录弹窗 ========== -->
+        <div class="modal-overlay" id="addHealthModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>💊 添加健康记录</h3>
+                    <button class="close-btn" id="closeHealthModal">✕</button>
+                </div>
+                <form id="healthForm">
+                    <div class="form-group">
+                        <label class="form-label">记录类型</label>
+                        <div class="option-group" id="healthTypeSelect">
+                            <button type="button" class="option-btn selected" data-type="vaccine">💉 疫苗</button>
+                            <button type="button" class="option-btn" data-type="deworm">💊 驱虫</button>
+                            <button type="button" class="option-btn" data-type="checkup">🩺 体检</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">选择宠物</label>
+                        <div class="option-group" id="healthPetSelect">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">记录名称</label>
+                        <input type="text" class="form-input" id="healthName" placeholder="例如：狂犬疫苗第2针">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">日期</label>
+                        <input type="date" class="form-input" id="healthDate">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">备注</label>
+                        <input type="text" class="form-input" id="healthNote" placeholder="选填">
+                    </div>
+                    <button type="submit" class="submit-btn">确认添加</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 领养详情弹窗 ========== -->
+        <div class="modal-overlay" id="adoptDetailModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>💕 领养详情</h3>
+                    <button class="close-btn" id="closeAdoptDetailModal">✕</button>
+                </div>
+                <div id="adoptDetailContent">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast提示 -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/app.js"></script>
+    <script src="js/community.js"></script>
+    <script src="js/pets.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/adoption.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+
+</html>
