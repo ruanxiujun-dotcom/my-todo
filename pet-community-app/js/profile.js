@@ -31,11 +31,20 @@ const ProfileModule = {
                     case 'myAlbum':
                         App.showToast('📸 宠物相册');
                         break;
+                    case 'nearbyServices':
+                        App.switchPage('pageServices');
+                        // 取消底部导航高亮
+                        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                        break;
                     case 'adoptRecord':
                         App.showToast('💕 领养记录');
                         break;
                     case 'appointment':
-                        App.showToast('📅 预约记录');
+                        if (typeof AppointmentModule !== 'undefined') {
+                            AppointmentModule.showRecords();
+                        } else {
+                            App.showToast('📅 预约记录');
+                        }
                         break;
                     case 'orders':
                         App.showToast('📦 我的订单');

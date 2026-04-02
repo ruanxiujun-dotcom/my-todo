@@ -60,7 +60,13 @@ const ServicesModule = {
         // 绑定卡片点击
         container.querySelectorAll('.service-card').forEach(card => {
             card.addEventListener('click', () => {
-                App.showToast('📞 拨打电话预约...');
+                const serviceId = card.dataset.serviceId;
+                const serviceName = card.querySelector('h4').textContent;
+                if (typeof AppointmentModule !== 'undefined') {
+                    AppointmentModule.openForm(serviceId, serviceName);
+                } else {
+                    App.showToast('📞 拨打电话预约...');
+                }
             });
         });
     },

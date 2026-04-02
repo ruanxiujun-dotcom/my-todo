@@ -81,7 +81,9 @@ const App = {
             'closeHealthModal': 'addHealthModal',
             'closeAdoptDetailModal': 'adoptDetailModal',
             'closePublishTaskModal': 'publishTaskModal',
-            'closeTaskDetailModal': 'taskDetailModal'
+            'closeTaskDetailModal': 'taskDetailModal',
+            'closeAppointmentModal': 'appointmentModal',
+            'closeAppointmentRecordModal': 'appointmentRecordModal'
         };
 
         Object.entries(modalMap).forEach(([btnId, modalId]) => {
@@ -421,6 +423,33 @@ const App = {
         localStorage.setItem('pc_services', JSON.stringify(services));
         localStorage.setItem('pc_adoptions', JSON.stringify(adoptions));
 
+        // 示例服务预约数据
+        const appointments = [
+            {
+                id: 'apt_1',
+                serviceId: 's_2',
+                serviceName: '萌宠洗护沙龙',
+                animalType: '金毛',
+                datetime: '2026-04-10 14:00',
+                requirements: ['需要剪指甲', '优先安排'],
+                notes: '我家狗狗比较怕水，请分配有经验的美容师',
+                status: 'accepted',
+                createdAt: Date.now() - 86400000
+            },
+            {
+                id: 'apt_2',
+                serviceId: 's_1',
+                serviceName: '爱心宠物医院',
+                animalType: '布偶猫',
+                datetime: '2026-04-05 09:30',
+                requirements: ['需要接送'],
+                notes: '常规疫苗接种',
+                status: 'completed',
+                createdAt: Date.now() - 500000000
+            }
+        ];
+        localStorage.setItem('pc_appointments', JSON.stringify(appointments));
+
         // 示例上门服务任务
         const doorTasks = [
             {
@@ -546,6 +575,7 @@ const App = {
         if (typeof ServicesModule !== 'undefined') ServicesModule.init();
         if (typeof AdoptionModule !== 'undefined') AdoptionModule.init();
         if (typeof DoorServiceModule !== 'undefined') DoorServiceModule.init();
+        if (typeof AppointmentModule !== 'undefined') AppointmentModule.init();
         if (typeof ProfileModule !== 'undefined') ProfileModule.init();
     }
 };

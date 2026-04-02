@@ -268,6 +268,11 @@
                     <div class="menu-section">
                         <div class="menu-section-title">服务</div>
                         <div class="menu-list">
+                            <div class="menu-item" data-action="nearbyServices">
+                                <span class="menu-icon">🏪</span>
+                                <span class="menu-text">附近服务</span>
+                                <span class="menu-arrow">›</span>
+                            </div>
                             <div class="menu-item" data-action="adoptRecord">
                                 <span class="menu-icon">💕</span>
                                 <span class="menu-text">领养记录</span>
@@ -559,6 +564,66 @@
             </div>
         </div>
 
+        <!-- ========== 服务预约表单弹窗 ========== -->
+        <div class="modal-overlay" id="appointmentModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📅 预约服务</h3>
+                    <button class="close-btn" onclick="App.closeModal('appointmentModal')">✕</button>
+                </div>
+                <form id="appointmentForm">
+                    <div style="font-size:16px;font-weight:700;color:var(--primary-light);margin-bottom:16px;text-align:center;" id="aptServiceName">服务名称</div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">服务对象（宠物）</label>
+                        <div class="option-group" id="aptPetSelect">
+                            <!-- JS渲染 -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">服务日期</label>
+                            <input type="date" class="form-input" id="aptDateInput" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">具体时间</label>
+                            <input type="time" class="form-input" id="aptTimeInput" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">额外要求 (多选)</label>
+                        <div class="option-group" id="aptReqSelect">
+                            <button type="button" class="option-btn" onclick="this.classList.toggle('selected')">🚗 需要接送</button>
+                            <button type="button" class="option-btn" onclick="this.classList.toggle('selected')">✂️ 需要剪指甲</button>
+                            <button type="button" class="option-btn" onclick="this.classList.toggle('selected')">🥩 自带干粮</button>
+                            <button type="button" class="option-btn" onclick="this.classList.toggle('selected')">✨ 优先安排</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">备注叮嘱</label>
+                        <textarea class="form-textarea" id="aptNotesInput" placeholder="可以在此备注宠物的一些特殊小习惯等..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" style="background:var(--success);">提交预约</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 预约记录弹窗 ========== -->
+        <div class="modal-overlay" id="appointmentRecordModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📅 我的预约记录</h3>
+                    <button class="close-btn" onclick="App.closeModal('appointmentRecordModal')">✕</button>
+                </div>
+                <div id="aptRecordList" style="max-height: 60vh; overflow-y: auto;">
+                    <!-- JS动态渲染 -->
+                </div>
+            </div>
+        </div>
+
         <!-- Toast提示 -->
         <div class="toast" id="toast"></div>
     </div>
@@ -570,6 +635,7 @@
     <script src="js/services.js"></script>
     <script src="js/adoption.js"></script>
     <script src="js/doorservice.js"></script>
+    <script src="js/appointment.js"></script>
     <script src="js/profile.js"></script>
 </body>
 

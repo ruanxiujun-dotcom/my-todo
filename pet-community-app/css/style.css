@@ -1884,3 +1884,35 @@ body {
     background: rgba(167, 139, 250, 0.15);
     color: var(--primary-light);
 }
+
+/* ==========================================
+   服务预约模块
+   ========================================== */
+.apt-record-item {
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+}
+
+.apt-item-reqs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.apt-item-reqs span {
+    font-size: 11px;
+    background: rgba(167, 139, 250, 0.15);
+    color: var(--primary-light);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+}
+
+.apt-item-notes {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    line-height: 1.4;
+}
