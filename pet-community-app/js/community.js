@@ -131,6 +131,13 @@ const CommunityModule = {
                         </svg>
                         <span>分享</span>
                     </button>
+                    <button class="post-action-btn convert-task-btn" data-post-id="${post.id}" title="转为上门服务任务">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <path d="M9 22V12h6v10"></path>
+                        </svg>
+                        <span>转任务</span>
+                    </button>
                 </div>
                 ${commentsHtml}
             </div>
@@ -158,6 +165,17 @@ const CommunityModule = {
         document.querySelectorAll('.share-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 App.showToast('📤 已复制链接');
+            });
+        });
+
+        // 转为上门服务任务
+        document.querySelectorAll('.convert-task-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const postId = btn.dataset.postId;
+                if (typeof DoorServiceModule !== 'undefined') {
+                    DoorServiceModule.convertPostToTask(postId);
+                    App.showToast('📝 请填写任务信息');
+                }
             });
         });
     },

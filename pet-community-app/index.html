@@ -29,6 +29,11 @@
                         <path d="M21 21l-4.35-4.35"></path>
                     </svg>
                 </button>
+                <button class="icon-btn" id="headerAdoptBtn" title="领养中心">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </button>
                 <button class="icon-btn" id="notifBtn" title="通知">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -156,6 +161,52 @@
 
                     <!-- 领养列表 -->
                     <div class="adopt-grid" id="adoptGrid">
+                        <!-- 由JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== 上门服务页面 ========== -->
+            <section class="page" id="pageDoorService">
+                <div class="page-scroll">
+                    <div class="section-header">
+                        <h2 class="section-title">🏠 上门服务</h2>
+                        <button class="section-link" id="publishTaskBtn">+ 发布任务</button>
+                    </div>
+
+                    <!-- 统计卡片 -->
+                    <div class="adopt-stats">
+                        <div class="adopt-stat-card">
+                            <div class="adopt-stat-num" id="doorTaskOpen">0</div>
+                            <div class="adopt-stat-label">待认领</div>
+                        </div>
+                        <div class="adopt-stat-card">
+                            <div class="adopt-stat-num" id="doorTaskClaimed">0</div>
+                            <div class="adopt-stat-label">进行中</div>
+                        </div>
+                        <div class="adopt-stat-card">
+                            <div class="adopt-stat-num" id="doorTaskCompleted">0</div>
+                            <div class="adopt-stat-label">已完成</div>
+                        </div>
+                    </div>
+
+                    <!-- 类型筛选 -->
+                    <div class="filter-tags" id="doorTypeFilters">
+                        <button class="filter-tag active" data-filter="all">全部</button>
+                        <button class="filter-tag" data-filter="feeding">🍽️ 上门喂养</button>
+                        <button class="filter-tag" data-filter="walking">🦮 上门遛狗</button>
+                    </div>
+
+                    <!-- 状态筛选 -->
+                    <div class="filter-tags" id="doorStatusFilters" style="padding-top:0;">
+                        <button class="filter-tag active" data-filter="all">全部状态</button>
+                        <button class="filter-tag" data-filter="open">🟡 待认领</button>
+                        <button class="filter-tag" data-filter="claimed">🔵 进行中</button>
+                        <button class="filter-tag" data-filter="completed">🟢 已完成</button>
+                    </div>
+
+                    <!-- 任务列表 -->
+                    <div id="doorTaskList">
                         <!-- 由JS动态生成 -->
                     </div>
                 </div>
@@ -292,14 +343,14 @@
                 </div>
                 <span>发布</span>
             </button>
-            <button class="nav-item" data-page="pageAdoption">
+            <button class="nav-item" data-page="pageDoorService">
                 <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2">
-                    <path
-                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                    </path>
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <path d="M9 22V12h6v10"></path>
+                    <circle cx="12" cy="8" r="1" fill="currentColor"></circle>
                 </svg>
-                <span>领养</span>
+                <span>上门</span>
             </button>
             <button class="nav-item" data-page="pageProfile">
                 <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -447,6 +498,67 @@
             </div>
         </div>
 
+        <!-- ========== 发布上门服务任务弹窗 ========== -->
+        <div class="modal-overlay" id="publishTaskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🏠 发布上门服务</h3>
+                    <button class="close-btn" id="closePublishTaskModal">✕</button>
+                </div>
+                <form id="publishTaskForm">
+                    <div class="form-group">
+                        <label class="form-label">服务类型</label>
+                        <div class="option-group" id="taskTypeSelect">
+                            <button type="button" class="option-btn selected" data-type="feeding">🍽️ 上门喂养</button>
+                            <button type="button" class="option-btn" data-type="walking">🦮 上门遛狗</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">任务标题</label>
+                        <input type="text" class="form-input" id="taskTitleInput" placeholder="例如：需要上门喂猫3天" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">详细描述</label>
+                        <textarea class="form-textarea" id="taskDescInput" placeholder="描述具体需求，如喂养次数、注意事项等..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">选择宠物</label>
+                        <div class="option-group" id="taskPetSelect">
+                            <!-- 由JS动态生成 -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">服务地址</label>
+                        <input type="text" class="form-input" id="taskAddressInput" placeholder="例如：朝阳区xxx小区" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">服务时间</label>
+                            <input type="text" class="form-input" id="taskDateInput" placeholder="例如：4月5日-4月7日">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">报酬（元/天）</label>
+                            <input type="number" class="form-input" id="taskRewardInput" placeholder="不填则为面议" min="0">
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">发布任务</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========== 上门服务任务详情弹窗 ========== -->
+        <div class="modal-overlay" id="taskDetailModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🏠 任务详情</h3>
+                    <button class="close-btn" id="closeTaskDetailModal">✕</button>
+                </div>
+                <div id="taskDetailContent">
+                    <!-- 由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+
         <!-- Toast提示 -->
         <div class="toast" id="toast"></div>
     </div>
@@ -457,6 +569,7 @@
     <script src="js/pets.js"></script>
     <script src="js/services.js"></script>
     <script src="js/adoption.js"></script>
+    <script src="js/doorservice.js"></script>
     <script src="js/profile.js"></script>
 </body>
 

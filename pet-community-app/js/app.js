@@ -38,6 +38,26 @@ const App = {
                 PetsModule.updatePublishPetSelect();
             }
         });
+
+        // 顶栏领养按钮 -> 切换到领养页面
+        const adoptBtn = document.getElementById('headerAdoptBtn');
+        if (adoptBtn) {
+            adoptBtn.addEventListener('click', () => {
+                this.switchPage('pageAdoption');
+                // 更新导航样式（取消其他高亮）
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            });
+        }
+
+        // 上门服务“发布任务”按钮
+        const publishTaskBtn = document.getElementById('publishTaskBtn');
+        if (publishTaskBtn) {
+            publishTaskBtn.addEventListener('click', () => {
+                if (typeof DoorServiceModule !== 'undefined') {
+                    DoorServiceModule.openPublishTask();
+                }
+            });
+        }
     },
 
     // 切换页面
@@ -59,7 +79,9 @@ const App = {
             'closePublishModal': 'publishModal',
             'closeAddPetModal': 'addPetModal',
             'closeHealthModal': 'addHealthModal',
-            'closeAdoptDetailModal': 'adoptDetailModal'
+            'closeAdoptDetailModal': 'adoptDetailModal',
+            'closePublishTaskModal': 'publishTaskModal',
+            'closeTaskDetailModal': 'taskDetailModal'
         };
 
         Object.entries(modalMap).forEach(([btnId, modalId]) => {
@@ -398,6 +420,95 @@ const App = {
         localStorage.setItem('pc_posts', JSON.stringify(posts));
         localStorage.setItem('pc_services', JSON.stringify(services));
         localStorage.setItem('pc_adoptions', JSON.stringify(adoptions));
+
+        // 示例上门服务任务
+        const doorTasks = [
+            {
+                id: 'task_1',
+                type: 'feeding',
+                title: '出差3天，需要上门喂猫',
+                desc: '我家有一只布偶猫“咪咪”，需要每天早晚各喂一次猫粮，换水，铲屎一次。猫咪性格温顺，不怎么认生。',
+                petEmoji: '🐱',
+                petName: '咪咪',
+                publisherId: 'user_2',
+                publisherName: '猫奴日记',
+                publisherAvatar: '😺',
+                address: '朝阳区幸福小区3号楼',
+                dateRange: '4月5日-4月7日',
+                reward: '¥50/天',
+                status: 'open',
+                volunteerId: null,
+                volunteerName: null,
+                volunteerAvatar: null,
+                fromPostId: null,
+                createdAt: Date.now(),
+                time: '3小时前'
+            },
+            {
+                id: 'task_2',
+                type: 'walking',
+                title: '周末需要人帮忙遛狗',
+                desc: '我家金毛“旺财”需要每天遛1小时，本周末我要加班，需要志愿者帮忙遛狗。旺财很亲人，会听基本指令。',
+                petEmoji: '🐕',
+                petName: '旺财',
+                publisherId: 'user_1',
+                publisherName: '小明和旺财',
+                publisherAvatar: '😊',
+                address: '海淀区阳光花园5栋',
+                dateRange: '4月5日-4月6日',
+                reward: '¥80/天',
+                status: 'open',
+                volunteerId: null,
+                volunteerName: null,
+                volunteerAvatar: null,
+                fromPostId: null,
+                createdAt: Date.now() - 3600000,
+                time: '5小时前'
+            },
+            {
+                id: 'task_3',
+                type: 'feeding',
+                title: '旅行期间帮忙照顾仓鼠',
+                desc: '我家有一只金丝熊仓鼠“仔仔”，需要每天换水、加食物、清理笼子。很乖不咬人。',
+                petEmoji: '🐹',
+                petName: '仔仔',
+                publisherId: 'user_5',
+                publisherName: '仓鼠爱好者',
+                publisherAvatar: '🐹',
+                address: '东城区和平里8号',
+                dateRange: '4月10日-4月15日',
+                reward: '¥30/天',
+                status: 'claimed',
+                volunteerId: 'vol_1',
+                volunteerName: '爱心小明',
+                volunteerAvatar: '🤩',
+                fromPostId: null,
+                createdAt: Date.now() - 86400000,
+                time: '昨天'
+            },
+            {
+                id: 'task_4',
+                type: 'walking',
+                title: '帮忙遛泰迪犬一周',
+                desc: '我家泰迪“豆豆”很乖，不拉绳子，需要每天下午遛30分钟即可。',
+                petEmoji: '🐕',
+                petName: '豆豆',
+                publisherId: 'user_3',
+                publisherName: '铲屎官联盟',
+                publisherAvatar: '🐾',
+                address: '西城区月坛公园旁',
+                dateRange: '3月25日-3月31日',
+                reward: '¥40/天',
+                status: 'completed',
+                volunteerId: 'vol_2',
+                volunteerName: '狗狗好友',
+                volunteerAvatar: '😄',
+                fromPostId: null,
+                createdAt: Date.now() - 172800000,
+                time: '2天前'
+            }
+        ];
+        localStorage.setItem('pc_doortasks', JSON.stringify(doorTasks));
     },
 
     // ========== 数据读写工具 ==========
@@ -434,6 +545,7 @@ const App = {
         if (typeof PetsModule !== 'undefined') PetsModule.init();
         if (typeof ServicesModule !== 'undefined') ServicesModule.init();
         if (typeof AdoptionModule !== 'undefined') AdoptionModule.init();
+        if (typeof DoorServiceModule !== 'undefined') DoorServiceModule.init();
         if (typeof ProfileModule !== 'undefined') ProfileModule.init();
     }
 };
