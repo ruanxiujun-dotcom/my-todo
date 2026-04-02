@@ -44,6 +44,15 @@ const AppointmentModule = {
                 ${pet.emoji} ${pet.name}
             </button>
         `).join('');
+
+        // 绑定单选点击事件
+        const btns = container.querySelectorAll('.option-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btns.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
     },
 
     // ========== 绑定预约表单提交 ==========
